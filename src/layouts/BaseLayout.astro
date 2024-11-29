@@ -1,0 +1,23 @@
+---
+// BaseLayout.astro
+import Backround from '../components/Backround.astro';
+
+interface Props {
+  title?: string;
+  backgroundType?: 'bubbles' | 'marble';
+}
+
+const { title = 'Mi Sitio', backgroundType = 'bubbles' } = Astro.props;
+---
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{title}</title>
+  </head>
+  <body class="bg-white">
+    <Backround type={backgroundType} />
+    <slot />
+  </body>
+</html>

@@ -1,0 +1,136 @@
+---
+// src/components/BackgroundEffect.astro
+interface Props {
+  type?: 'bubbles' | 'marble';
+}
+
+const { type = 'bubbles' } = Astro.props;
+---
+
+<div class="background-wrapper">
+  {type === 'bubbles' && <div class="bubbles-effect"></div>}
+  {type === 'marble' && <div class="marble-effect"></div>}
+</div>
+
+<style>
+  .background-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: -1;
+    overflow: hidden;
+  }
+
+  .bubbles-effect {
+    width: 100%;
+    height: 100%;
+  }
+
+  .marble-effect {
+    width: 100%;
+    height: 100%;
+    background-color: #f5f5dc;
+    opacity: 0.8;
+  }
+</style>
+
+<script>
+  type BubbleStyles = {
+    position: string;
+    width: string;
+    height: string;
+    background: string;
+    borderRadius: string;
+    filter: string;
+    left: string;
+    top: string;
+    transition: string;
+  };
+
+  const wrapper = document.querySelector('.bubbles-effect') as HTMLDivElement;
+  
+  if (wrapper) {
+    const createBubble = (initialPosition = false) => {
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble';
+      
+      const size = Math.random() * 150 + 100;
+      
+      const styles: BubbleStyles = {
+        position: 'absolute',
+        width: `${size}px`,
+        height: `${size}px`,
+        background: 'rgba(0, 0, 0, 0.1)',
+        borderRadius: '50%',
+        filter: 'blur(10px)',
+        left: `${Math.random() * 100}%`,
+        top: initialPosition ? `${Math.random() * 100}%` : '120%',
+        transition: 'transform 0.5s ease-out'
+      };
+
+      Object.assign(bubble.style, styles);
+      return bubble;
+    };
+
+    // Crear grupo inicial de burbujas
+    for (let i = 0; i < 15; i++) {
+      wrapper.appendChild(createBubble(true));
+    }
+
+    // Variables para el control del scroll
+    let lastScrollY = window.scrollY;
+    const viewportHeight = window.innerHeight;
+    let ticking = false;
+
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrolled = window.scrollY;
+          const bubbles = document.querySelectorAll('.bubble');
+          
+          bubbles.forEach((bubble, index) => {
+            if (bubble instanceof HTMLElement) {
+              const speed = 0.05 + (index * 0.01);
+              const yPos = scrolled * speed;
+              
+              const currentTransform = bubble.style.transform;
+              const currentY = currentTransform ? 
+                parseFloat(currentTransform.replace('translateY(', '').replace('px)', '')) : 0;
+
+              if (Math.abs(currentY) > viewportHeight * 1.5) {
+                bubble.remove();
+                const newBubble = createBubble();
+                wrapper.appendChild(newBubble);
+                // En lugar de usar offsetHeight, forzamos un reflow de otra manera
+                void wrapper.getBoundingClientRect();
+              } else {
+                bubble.style.transform = `translateY(${-yPos}px)`;
+              }
+            }
+          });
+          
+          lastScrollY = scrolled;
+          ticking = false;
+        });
+        
+        ticking = true;
+      }
+    });
+
+    // Ajustar cuando cambia el tamaño de la ventana
+    let resizeTimeout: ReturnType<typeof setTimeout>;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        const bubbles = document.querySelectorAll('.bubble');
+        bubbles.forEach(bubble => {
+          if (bubble instanceof HTMLElement) {
+            bubble.style.left = `${Math.random() * 100}%`;
+          }
+        });
+      }, 250);
+    });
+  }
+</script>

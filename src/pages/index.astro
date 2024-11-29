@@ -1,16 +1,23 @@
 ---
-
+// src/pages/index.astro
+import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout backgroundType="bubbles">
+  <div class="p-8 max-w-4xl mx-auto">
+    <h1 class="text-4xl font-bold mb-8">Mi Página</h1>
+    
+    <!-- Secciones de ejemplo para generar scroll -->
+    {Array.from({ length: 50 }).map((_, i) => (
+      <section class="mb-16">
+        <h2 class="text-2xl font-bold mb-4">Sección {i + 1}</h2>
+        <p class="mb-4">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        </p>
+        <p class="mb-4">
+          Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+      </section>
+    ))}
+  </div>
+</BaseLayout>
