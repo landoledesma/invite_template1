@@ -1,0 +1,136 @@
+---
+// Multimedia.astro
+const videoUrl = "URL_DEL_VIDEO";  // Reemplaza con tu URL real
+const audioUrl = "URL_DEL_AUDIO";  // Reemplaza con tu URL real
+
+// Mensaje de dedicatoria como respaldo
+const dedicatoria = {
+  titulo: "Nuestra Dedicatoria",
+  mensaje: "En este día tan especial, queremos compartir con ustedes no solo una celebración, sino el comienzo de una historia de amor que durará toda la vida. Cada momento juntos nos ha traído hasta aquí, y estamos emocionados de comenzar este nuevo capítulo de nuestras vidas con las personas que más queremos."
+};
+
+// Función para verificar si una URL es válida
+const hasValidUrl = (url: string) => {
+  return url && url !== "URL_DEL_VIDEO" && url !== "URL_DEL_AUDIO";
+};
+
+const hasVideo = hasValidUrl(videoUrl);
+const hasAudio = hasValidUrl(audioUrl);
+---
+
+<section class="py-16 px-4 max-w-6xl mx-auto">
+  <h2 class="text-4xl font-semibold text-center mb-12 text-gray-800">Multimedia</h2>
+  
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <!-- Columna izquierda: Foto -->
+    <div class="rounded-lg overflow-hidden shadow-xl">
+      <img 
+        src="/img/Pareja1.webp" 
+        alt="Nuestra foto de pareja" 
+        class="w-full h-full object-cover"
+      />
+    </div>
+
+    <!-- Columna derecha: Video/Audio/Dedicatoria -->
+    <div class="space-y-8">
+      {/* Video o primera parte de la dedicatoria */}
+      <div class="rounded-lg overflow-hidden shadow-lg bg-gray-100 p-4">
+        {hasVideo ? (
+          <>
+            <h3 class="text-2xl font-medium mb-4 text-gray-700">Nuestro Video</h3>
+            <div class="aspect-w-16 aspect-h-9">
+              <video 
+                controls 
+                class="w-full rounded"
+                poster="/img/video-poster.jpg"
+              >
+                <source src={videoUrl} type="video/mp4">
+                <p class="text-center py-4">Tu navegador no soporta el elemento de video.</p>
+              </video>
+            </div>
+          </>
+        ) : (
+          <>
+            <h3 class="text-2xl font-medium mb-4 text-gray-700">{dedicatoria.titulo}</h3>
+            <p class="text-gray-600 leading-relaxed">
+              {dedicatoria.mensaje}
+            </p>
+          </>
+        )}
+      </div>
+
+      {/* Audio o mensaje adicional */}
+      <div class="rounded-lg overflow-hidden shadow-lg bg-gray-100 p-4">
+        {hasAudio ? (
+          <>
+            <h3 class="text-2xl font-medium mb-4 text-gray-700">Nuestra Canción</h3>
+            <audio 
+              controls 
+              class="w-full"
+            >
+              <source src={audioUrl} type="audio/mpeg">
+              <p class="text-center py-2">Tu navegador no soporta el elemento de audio.</p>
+            </audio>
+          </>
+        ) : (
+          <div class="text-center py-4">
+            <p class="text-gray-600 italic">
+              "El amor no se trata de mirarse el uno al otro, sino de mirar juntos en la misma dirección."
+            </p>
+            <p class="text-gray-500 mt-2">- Antoine de Saint-Exupéry</p>
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  audio::-webkit-media-controls-panel {
+    background-color: #f3f4f6;
+  }
+  
+  audio::-webkit-media-controls-current-time-display,
+  audio::-webkit-media-controls-time-remaining-display {
+    color: #374151;
+  }
+</style>
+
+<script>
+  // Script para manejar errores de carga de media
+  document.addEventListener('DOMContentLoaded', () => {
+    const videoElement = document.querySelector('video');
+    const audioElement = document.querySelector('audio');
+
+    if (videoElement) {
+      videoElement.addEventListener('error', (e) => {
+        const container = videoElement.parentElement;
+        if (container) {
+          container.innerHTML = `
+            <div class="text-center py-4">
+              <p class="text-gray-600 italic">
+                "Cada historia de amor es hermosa, pero la nuestra es mi favorita."
+              </p>
+            </div>
+          `;
+        }
+      });
+    }
+
+    if (audioElement) {
+      audioElement.addEventListener('error', (e) => {
+        const container = audioElement.parentElement;
+        if (container) {
+          container.innerHTML = `
+            <div class="text-center py-4">
+              <p class="text-gray-600 italic">
+                "La música expresa lo que no puede ser dicho y aquello sobre lo que es imposible permanecer en silencio."
+              </p>
+              <p class="text-gray-500 mt-2">- Victor Hugo</p>
+            </div>
+          `;
+        }
+      });
+    }
+  });
+</script>
