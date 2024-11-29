@@ -1,17 +1,21 @@
 ---
-// Definir las imágenes directamente
 const images = [
   '/img/wedd1.webp',
   '/img/wedd2.webp',
-  // Añade aquí todas tus imágenes
+  
 ];
+
+const logoPath = '/img/logo.webp';
 ---
 
-<div class="relative w-full max-w-6xl mx-auto h-[600px] overflow-hidden">
+<div class="relative w-full max-w-6xl mx-auto h-[600px] overflow-hidden group">
+  <!-- Contenedor del carrusel con overlay -->
   <div class="carousel-container flex transition-transform duration-500 h-full">
     {
       images.map((imgPath, index) => (
-        <div class="carousel-slide w-full flex-shrink-0 h-full">
+        <div class="carousel-slide w-full flex-shrink-0 h-full relative">
+          {/* Overlay para la opacidad */}
+          <div class="absolute inset-0 bg-black/30 z-10"></div>
           <img
             src={imgPath}
             alt={`Imagen ${index + 1} de la pareja`}
@@ -23,9 +27,18 @@ const images = [
     }
   </div>
   
+  <!-- Logo centrado -->
+<div class="absolute bottom-16 left-1/2 transform -translate-x-1/2 z-20 w-40 h-40">
+    <img
+      src={logoPath}
+      alt="Logo de la pareja"
+      class="w-full h-full object-contain rounded-full p-2 bg-white/10 backdrop-blur-sm"
+    />
+  </div>
+  
   <!-- Botones de navegación -->
   <button 
-    class="prev absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/50 hover:bg-white/75 p-2 rounded-full"
+    class="prev absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/50 hover:bg-white/75 p-2 rounded-full z-30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
     aria-label="Anterior imagen"
   >
     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -34,7 +47,7 @@ const images = [
   </button>
   
   <button 
-    class="next absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/50 hover:bg-white/75 p-2 rounded-full"
+    class="next absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/50 hover:bg-white/75 p-2 rounded-full z-30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
     aria-label="Siguiente imagen"
   >
     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -43,7 +56,7 @@ const images = [
   </button>
   
   <!-- Indicadores -->
-  <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+  <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-30">
     {
       images.map((_, index) => (
         <button
