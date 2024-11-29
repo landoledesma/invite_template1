@@ -1,23 +1,21 @@
 ---
-// BaseLayout.astro
-import Backround from '../components/Backround.astro';
+// src/layouts/BaseLayout.astro
 
-interface Props {
-  title?: string;
-  backgroundType?: 'bubbles' | 'marble';
-}
-
-const { title = 'Mi Sitio', backgroundType = 'bubbles' } = Astro.props;
+import Backround from "../components/Backround.astro"
 ---
 
+<!DOCTYPE html>
 <html lang="es">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>{title}</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mi Proyecto Astro</title>
+    <!-- Puedes agregar aquí más meta tags o enlaces a estilos globales -->
   </head>
-  <body class="bg-white">
-    <Backround type={backgroundType} />
-    <slot />
+  <body>
+    <Backround />
+    <main>
+      <slot />
+    </main>
   </body>
 </html>
