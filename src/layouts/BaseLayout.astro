@@ -1,7 +1,11 @@
 ---
-// src/layouts/BaseLayout.astro
+import Backround from '../components/Backround.astro';
 
-import Backround from "../components/Backround.astro"
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
 ---
 
 <!DOCTYPE html>
@@ -9,13 +13,28 @@ import Backround from "../components/Backround.astro"
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mi Proyecto Astro</title>
-    <!-- Puedes agregar aquí más meta tags o enlaces a estilos globales -->
+    <title>{title}</title>
   </head>
   <body>
+    <!-- Carga del fondo animado -->
     <Backround />
+    <!-- Contenido principal -->
     <main>
       <slot />
     </main>
   </body>
 </html>
+
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    position: relative;
+  }
+
+  main {
+    position: relative;
+    z-index: 1; /* Para que el contenido esté por encima del fondo */
+  }
+</style>
