@@ -1,76 +1,62 @@
 ---
-const videoUrl = "URL_DEL_VIDEO";  // Reemplaza con tu URL real
-const audioUrl = "URL_DEL_AUDIO";  // Reemplaza con tu URL real
+// src/components/Multimedia.astro
 
-// Función para verificar si una URL es válida
-const hasValidUrl = (url: string) => {
-  return url && url !== "URL_DEL_VIDEO" && url !== "URL_DEL_AUDIO";
-};
+// Verificación simple de archivos
+const videoExists = await fetch('/multimedia/video-pareja.mp4')
+  .then(res => res.ok)
+  .catch(() => false);
 
-const hasVideo = hasValidUrl(videoUrl);
-const hasAudio = hasValidUrl(audioUrl);
+const audioExists = await fetch('/multimedia/cancion.mp3')
+  .then(res => res.ok)
+  .catch(() => false);
 ---
 
-<section class="py-16 px-4 max-w-6xl mx-auto">
-  <h2 class="text-4xl font-semibold text-center mb-12 text-gray-800">Multimedia</h2>
-  
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-    <!-- Columna izquierda: Foto con efecto de parallax -->
-    <div class="relative overflow-hidden rounded-lg shadow-xl transform -rotate-2">
-        <img 
-          src="/img/Pareja1.webp" 
-          alt="Imagen Parallax" 
-          class="absolute inset-0 w-full h-full object-cover">
-      </div>
-      
-
-    <!-- Columna derecha: Video o audio -->
-    <div class="space-y-8">
-      {/* Video */}
-      <div class="rounded-lg overflow-hidden shadow-lg bg-gray-100 p-4">
-        {hasVideo ? (
-          <>
-            <h3 class="text-2xl font-medium mb-4 text-gray-700">Nuestro Video</h3>
-            <div class="aspect-w-16 aspect-h-9">
-              <video 
-                controls 
-                class="w-full rounded"
-                poster="/img/video-poster.jpg"
-              >
-                <source src={videoUrl} type="video/mp4">
-                <p class="text-center py-4">Tu navegador no soporta el elemento de video.</p>
-              </video>
-            </div>
-          </>
+<section class="py-20 bg-gradient-to-b from-pink-50 to-white">
+  <div class="max-w-6xl mx-auto px-4">
+    <h2 class="text-4xl font-serif text-center mb-16 text-gray-800">Nuestros Momentos</h2>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-center">
+      <!-- Video o Mensaje -->
+      <div class="rounded-lg overflow-hidden shadow-xl bg-white p-4">
+        {videoExists ? (
+          <video 
+            class="w-full rounded-lg"
+            controls
+          >
+            <source src="/multimedia/video-pareja.mp4" type="video/mp4" />
+          </video>
         ) : (
-          <div class="text-center py-4">
-            <p class="text-gray-600 italic">
-              "El amor no se trata de mirarse el uno al otro, sino de mirar juntos en la misma dirección."
-            </p>
-            <p class="text-gray-500 mt-2">- Antoine de Saint-Exupéry</p>
+          <div class="bg-pink-50 p-8 rounded-lg text-center min-h-[200px] flex items-center justify-center">
+            <p class="text-gray-700 italic text-lg">"El amor no necesita ser perfecto, solo necesita ser verdadero"</p>
           </div>
         )}
       </div>
 
-      {/* Audio */}
-      <div class="rounded-lg overflow-hidden shadow-lg bg-gray-100 p-4">
-        {hasAudio ? (
-          <>
-            <h3 class="text-2xl font-medium mb-4 text-gray-700">Nuestra Canción</h3>
-            <audio 
-              controls 
-              class="w-full"
-            >
-              <source src={audioUrl} type="audio/mpeg">
-              <p class="text-center py-2">Tu navegador no soporta el elemento de audio.</p>
+      <!-- Imagen con animación -->
+      <div class="relative overflow-hidden">
+        <div class="imagen-container">
+          <img 
+            src="/img/Pareja1.webp" 
+            alt="Nuestra foto especial" 
+            class="w-full h-[500px] object-cover rounded-lg shadow-2xl imagen-rotada"
+            loading="lazy"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent rounded-lg"></div>
+        </div>
+      </div>
+
+      <!-- Audio o Mensaje -->
+      <div class="bg-white p-6 rounded-lg shadow-xl">
+        {audioExists ? (
+          <div class="space-y-4">
+            <h3 class="text-xl font-medium text-gray-800 mb-4">Nuestra Canción</h3>
+            <audio controls class="w-full">
+              <source src="/multimedia/cancion.mp3" type="audio/mp3" />
             </audio>
-          </>
+          </div>
         ) : (
-          <div class="text-center py-4">
-            <p class="text-gray-600 italic">
-              "La música expresa lo que no puede ser dicho y aquello sobre lo que es imposible permanecer en silencio."
-            </p>
-            <p class="text-gray-500 mt-2">- Victor Hugo</p>
+          <div class="text-center p-8 min-h-[200px] flex items-center justify-center bg-pink-50 rounded-lg">
+            <p class="text-gray-700 italic text-lg">"La música es la banda sonora de nuestro amor"</p>
           </div>
         )}
       </div>
@@ -79,68 +65,34 @@ const hasAudio = hasValidUrl(audioUrl);
 </section>
 
 <style>
-    #parallaxImage {
-  background-size: cover;
-}
-
-  audio::-webkit-media-controls-panel {
-    background-color: #f3f4f6;
+  .imagen-container {
+    transform-style: preserve-3d;
+    transition: transform 0.5s ease;
   }
-  audio::-webkit-media-controls-current-time-display,
-  audio::-webkit-media-controls-time-remaining-display {
-    color: #374151;
+
+  .imagen-rotada {
+    transform: rotate(-3deg);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Efecto hover */
+  .imagen-container:hover .imagen-rotada {
+    transform: rotate(0) scale(1.05);
+  }
+
+  /* Animación de entrada */
+  .imagen-rotada {
+    animation: aparecer 1s ease-out;
+  }
+
+  @keyframes aparecer {
+    from {
+      opacity: 0;
+      transform: translateY(20px) rotate(-3deg);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) rotate(-3deg);
+    }
   }
 </style>
-
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    
-    
-    
-    // Reemplaza la parte del script que maneja el parallax con esto
-    const parallaxImage = document.getElementById('parallaxImage');
-
-if (parallaxImage) {
-  window.addEventListener('scroll', () => {
-    const scrollPosition = window.scrollY;
-    const speed = 0.2; // Puedes ajustar este valor para cambiar la velocidad
-    parallaxImage.style.transform = `translateY(${scrollPosition * speed}px)`;
-  });
-}
-
-    // Manejo de errores de video/audio
-    const videoElement = document.querySelector('video');
-    const audioElement = document.querySelector('audio');
-
-    if (videoElement) {
-      videoElement.addEventListener('error', () => {
-        const container = videoElement.parentElement;
-        if (container) {
-          container.innerHTML = `
-            <div class="text-center py-4">
-              <p class="text-gray-600 italic">
-                "Cada historia de amor es hermosa, pero la nuestra es mi favorita."
-              </p>
-            </div>
-          `;
-        }
-      });
-    }
-
-    if (audioElement) {
-      audioElement.addEventListener('error', () => {
-        const container = audioElement.parentElement;
-        if (container) {
-          container.innerHTML = `
-            <div class="text-center py-4">
-              <p class="text-gray-600 italic">
-                "La música expresa lo que no puede ser dicho y aquello sobre lo que es imposible permanecer en silencio."
-              </p>
-              <p class="text-gray-500 mt-2">- Victor Hugo</p>
-            </div>
-          `;
-        }
-      });
-    }
-  });
-</script>
