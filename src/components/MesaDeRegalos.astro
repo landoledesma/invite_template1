@@ -1,0 +1,11 @@
+---
+export interface Props {
+  enlace: string;
+}
+const { enlace = 'https://enlace-a-la-mesa-de-regalos.com' } = Astro.props;
+---
+
+<section class="mesa-de-regalos">
+  <h2>Mesa de Regalos</h2>
+  <a href={enlace} target="_blank">Visita nuestra mesa de regalos</a>
+</section>

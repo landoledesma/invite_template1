@@ -1,0 +1,13 @@
+---
+export interface Props {
+  padrinos: string[];
+}
+const { padrinos = ['Nombre del Padrino 1', 'Nombre del Padrino 2'] } = Astro.props;
+---
+
+<section class="padrinos">
+  <h2>Padrinos</h2>
+  <ul>
+    {padrinos.map(padrino => <li>{padrino}</li>)}
+  </ul>
+</section>

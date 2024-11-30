@@ -1,0 +1,10 @@
+---
+export interface Props {
+  mensaje: string;
+}
+const { mensaje = '¡Gracias por acompañarnos en este día tan especial!' } = Astro.props;
+---
+
+<section class="despedida">
+  <p>{mensaje}</p>
+</section>

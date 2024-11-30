@@ -1,0 +1,54 @@
+---
+export interface Props {
+  fechaEvento: string;
+}
+const { fechaEvento = '2024-12-31' } = Astro.props;
+---
+
+<section class="contador-del-dia" data-fecha={fechaEvento}>
+  <h2>Faltan <span id="dias-faltantes">0</span> días para el evento</h2>
+</section>
+
+<script>
+  // Calcula los días restantes entre hoy y la fecha del evento
+  const calcularDias = (fechaEventoString: string): number => {
+    const hoy = new Date();
+    const evento = new Date(fechaEventoString); // Convertimos el string a un objeto Date
+    const diferencia = Math.ceil((evento.getTime() - hoy.getTime()) / (1000 * 60 * 60 * 24));
+    return diferencia > 0 ? diferencia : 0; // Aseguramos que no retorne valores negativos
+  };
+
+  // Actualiza dinámicamente los días restantes en el DOM
+  const actualizarDiasFaltantes = (): void => {
+    const elementoContador = document.querySelector<HTMLSpanElement>('#dias-faltantes');
+    const elementoSeccion = document.querySelector<HTMLElement>('.contador-del-dia');
+
+    if (elementoContador && elementoSeccion) {
+      const fechaEvento = elementoSeccion.getAttribute('data-fecha') || '';
+      const diasFaltantes = calcularDias(fechaEvento);
+      elementoContador.textContent = diasFaltantes.toString();
+    }
+  };
+
+  // Ejecutar inmediatamente al cargar la página
+  actualizarDiasFaltantes();
+
+  // Actualización automática opcional (cada 24 horas)
+  setInterval(actualizarDiasFaltantes, 24 * 60 * 60 * 1000);
+</script>
+
+<style>
+  .contador-del-dia {
+    text-align: center;
+    margin: 20px 0;
+  }
+
+  .contador-del-dia h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  #dias-faltantes {
+    color: #ff5733;
+  }
+</style>

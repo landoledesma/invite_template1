@@ -1,0 +1,17 @@
+---
+export interface Props {
+  eventos: { hora: string; actividad: string }[];
+}
+const { eventos = [{ hora: '12:00 PM', actividad: 'Ceremonia' }] } = Astro.props;
+---
+
+<section class="intinerario">
+  <h2>Itinerario</h2>
+  <ul>
+    {eventos.map(evento => (
+      <li>
+        <strong>{evento.hora}</strong> - {evento.actividad}
+      </li>
+    ))}
+  </ul>
+</section>

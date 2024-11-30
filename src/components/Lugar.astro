@@ -1,0 +1,12 @@
+---
+export interface Props {
+  titulo: string;
+  direccion: string;
+}
+const { titulo = 'Lugar del Evento', direccion = 'Dirección aquí' } = Astro.props;
+---
+
+<section class="lugar">
+  <h2>{titulo}</h2>
+  <p>{direccion}</p>
+</section>

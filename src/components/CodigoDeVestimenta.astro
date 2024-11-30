@@ -1,0 +1,11 @@
+---
+export interface Props {
+  codigo: string;
+}
+const { codigo = 'Formal' } = Astro.props;
+---
+
+<section class="codigo-vestimenta">
+  <h2>Código de Vestimenta</h2>
+  <p>{codigo}</p>
+</section>

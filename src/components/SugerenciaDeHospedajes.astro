@@ -1,0 +1,17 @@
+---
+export interface Props {
+  hoteles: { nombre: string; direccion: string }[];
+}
+const { hoteles = [{ nombre: 'Hotel Ejemplo', direccion: 'Dirección aquí' }] } = Astro.props;
+---
+
+<section class="sugerencia-de-hospedajes">
+  <h2>Sugerencias de Hospedajes</h2>
+  <ul>
+    {hoteles.map(hotel => (
+      <li>
+        <strong>{hotel.nombre}</strong>: {hotel.direccion}
+      </li>
+    ))}
+  </ul>
+</section>

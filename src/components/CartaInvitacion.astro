@@ -1,0 +1,12 @@
+---
+export interface Props {
+  titulo: string;
+  mensaje: string;
+}
+const { titulo = '¡Estás Invitado!', mensaje = 'Te esperamos para celebrar nuestro día especial.' } = Astro.props;
+---
+
+<section class="carta-invitacion">
+  <h1>{titulo}</h1>
+  <p>{mensaje}</p>
+</section>

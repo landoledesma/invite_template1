@@ -1,0 +1,13 @@
+---
+export interface Props {
+  nombres: string[];
+}
+const { nombres = ['Nombre de los Padres del Novio', 'Nombre de los Padres de la Novia'] } = Astro.props;
+---
+
+<section class="padres-del-novio">
+  <h2>Padres</h2>
+  <ul>
+    {nombres.map(nombre => <li>{nombre}</li>)}
+  </ul>
+</section>

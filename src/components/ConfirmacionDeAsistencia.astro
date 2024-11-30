@@ -1,0 +1,11 @@
+---
+export interface Props {
+  enlace: string;
+}
+const { enlace = 'https://formulario-de-confirmacion.com' } = Astro.props;
+---
+
+<section class="confirmacion-asistencia">
+  <h2>Confirmación de Asistencia</h2>
+  <a href={enlace} target="_blank">Confirma tu asistencia aquí</a>
+</section>
