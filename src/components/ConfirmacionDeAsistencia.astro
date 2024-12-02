@@ -1,11 +1,145 @@
 ---
-export interface Props {
-  enlace: string;
-}
-const { enlace = 'https://formulario-de-confirmacion.com' } = Astro.props;
+// src/components/RsvpForm.astro
 ---
 
-<section class="confirmacion-asistencia">
-  <h2>Confirmación de Asistencia</h2>
-  <a href={enlace} target="_blank">Confirma tu asistencia aquí</a>
-</section>
+<div class="max-w-6xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden md:flex">
+    <div class="relative md:w-1/2 lg:w-2/5">
+      <img 
+        src="/img/pareja2.webp" 
+        alt="Pareja de novios" 
+        class="w-full h-96 md:h-full object-cover"
+      />
+      <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-gray-900/60 to-transparent p-6 md:pb-10">
+        <h1 class="text-2xl font-script text-white text-center">
+          INVITACIÓN PARA
+        </h1>
+        <h2 class="text-3xl font-script text-white text-center mt-2">
+          Familia MendozLegaria
+        </h2>
+        <p class="text-white text-center mt-2">
+          Total de invitados: <span class="font-semibold">4</span>
+        </p>
+      </div>
+    </div>
+  
+    <div class="p-6 md:w-1/2 lg:w-3/5 md:overflow-y-auto md:max-h-[800px]">
+      <div class="max-w-lg mx-auto space-y-6">
+        <div class="text-center space-y-2">
+          <p class="text-gray-600">
+            Con inmensa alegría te invitamos a celebrar Nuestra Boda.
+          </p>
+          <p class="text-blue-600 font-medium">
+            Favor de confirmar su presencia,<br>
+            a más tardar un mes antes<br>
+            del evento.
+          </p>
+          <p class="text-amber-700 font-medium">¡Muchas Gracias!</p>
+        </div>
+  
+        <form class="space-y-6">
+          <div class="space-y-4">
+            <p class="text-center font-script text-xl">
+              Completa y envía<br>
+              el siguiente formulario.
+            </p>
+  
+            <div class="space-y-2">
+              <p class="font-medium">Confirmar asistencia:</p>
+              <div class="space-y-2">
+                <label class="flex items-center space-x-2">
+                  <input type="radio" name="attendance" value="si" class="text-amber-600 focus:ring-amber-500">
+                  <span>Sí asistiremos</span>
+                </label>
+                <label class="flex items-center space-x-2">
+                  <input type="radio" name="attendance" value="no" class="text-amber-600 focus:ring-amber-500">
+                  <span>Lo siento, no podremos asistir</span>
+                </label>
+              </div>
+            </div>
+  
+            <div class="space-y-2">
+              <p class="font-medium">Eres familiar o amigo/a de:</p>
+              <div class="space-y-2">
+                <label class="flex items-center space-x-2">
+                  <input type="radio" name="relation" value="yuliana" class="text-amber-600 focus:ring-amber-500">
+                  <span>Yuliana</span>
+                </label>
+                <label class="flex items-center space-x-2">
+                  <input type="radio" name="relation" value="jaime" class="text-amber-600 focus:ring-amber-500">
+                  <span>Jaime</span>
+                </label>
+              </div>
+            </div>
+  
+            <div class="space-y-2">
+              <p class="font-medium">Confirmar asistencia:</p>
+              <div class="space-y-2">
+                {[4, 3, 2, 1].map((num) => (
+                  <label class="flex items-center space-x-2">
+                    <input type="radio" name="guests" value={num} class="text-amber-600 focus:ring-amber-500">
+                    <span>{num} Adulto{num > 1 ? 's' : ''}</span>
+                  </label>
+                ))}
+                <label class="flex items-center space-x-2">
+                  <input type="radio" name="guests" value="0" class="text-amber-600 focus:ring-amber-500">
+                  <span>Lo siento, no podremos asistir</span>
+                </label>
+              </div>
+            </div>
+  
+            <div class="space-y-2">
+              <p class="font-medium">Dedica unas bonitas palabras para Yuliana y Jaime:</p>
+              <textarea 
+                rows="4"
+                class="w-full rounded-lg border-gray-300 focus:border-amber-500 focus:ring-amber-500"
+              ></textarea>
+            </div>
+          </div>
+  
+          <button 
+            type="submit"
+            class="w-full bg-amber-600 text-white rounded-lg py-2 px-4 hover:bg-amber-700 transition duration-200"
+          >
+            Confirmar
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  <style>
+    .font-script {
+      font-family: 'Great Vibes', cursive;
+    }
+  </style>
+  
+  <script>
+    // Add your TypeScript form handling logic here
+    const form = document.querySelector('form');
+    
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const formData = new FormData(e.target as HTMLFormElement);
+      const data = Object.fromEntries(formData);
+      
+      try {
+        // Add your form submission logic here
+        console.log('Form data:', data);
+        
+        // Example API call:
+        // const response = await fetch('/api/rsvp', {
+        //   method: 'POST',
+        //   headers: {
+        //     'Content-Type': 'application/json',
+        //   },
+        //   body: JSON.stringify(data),
+        // });
+        
+        // Handle response
+        
+      } catch (error) {
+        console.error('Error submitting form:', error);
+      }
+    });
+  </script>
