@@ -1,54 +1,78 @@
 ---
-export interface Props {
-  fechaEvento: string;
-}
-const { fechaEvento = '2024-12-31' } = Astro.props;
+// CountdownTimer.astro
 ---
 
-<section class="contador-del-dia" data-fecha={fechaEvento}>
-  <h2>Faltan <span id="dias-faltantes">0</span> días para el evento</h2>
-</section>
-
 <script>
-  // Calcula los días restantes entre hoy y la fecha del evento
-  const calcularDias = (fechaEventoString: string): number => {
-    const hoy = new Date();
-    const evento = new Date(fechaEventoString); // Convertimos el string a un objeto Date
-    const diferencia = Math.ceil((evento.getTime() - hoy.getTime()) / (1000 * 60 * 60 * 24));
-    return diferencia > 0 ? diferencia : 0; // Aseguramos que no retorne valores negativos
-  };
+  interface TimeLeft {
+    days: number;
+    hours: number;
+    minutes: number;
+    seconds: number;
+  }
 
-  // Actualiza dinámicamente los días restantes en el DOM
-  const actualizarDiasFaltantes = (): void => {
-    const elementoContador = document.querySelector<HTMLSpanElement>('#dias-faltantes');
-    const elementoSeccion = document.querySelector<HTMLElement>('.contador-del-dia');
-
-    if (elementoContador && elementoSeccion) {
-      const fechaEvento = elementoSeccion.getAttribute('data-fecha') || '';
-      const diasFaltantes = calcularDias(fechaEvento);
-      elementoContador.textContent = diasFaltantes.toString();
+  const calculateTimeLeft = (targetDate: Date): TimeLeft => {
+    const difference = targetDate.getTime() - new Date().getTime();
+    
+    if (difference <= 0) {
+      return {
+        days: 0,
+        hours: 0,
+        minutes: 0,
+        seconds: 0
+      };
     }
+
+    return {
+      days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+      hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+      minutes: Math.floor((difference / 1000 / 60) % 60),
+      seconds: Math.floor((difference / 1000) % 60)
+    };
   };
 
-  // Ejecutar inmediatamente al cargar la página
-  actualizarDiasFaltantes();
+  const updateCountdown = () => {
+    const weddingDate = new Date('2024-12-31'); // Actualiza con tu fecha
+    const timeLeft = calculateTimeLeft(weddingDate);
 
-  // Actualización automática opcional (cada 24 horas)
-  setInterval(actualizarDiasFaltantes, 24 * 60 * 60 * 1000);
+    document.getElementById('days')!.textContent = timeLeft.days.toString();
+    document.getElementById('hours')!.textContent = timeLeft.hours.toString().padStart(2, '0');
+    document.getElementById('minutes')!.textContent = timeLeft.minutes.toString().padStart(2, '0');
+    document.getElementById('seconds')!.textContent = timeLeft.seconds.toString().padStart(2, '0');
+  };
+
+  // Actualizar cada segundo
+  setInterval(updateCountdown, 1000);
+  // Actualización inicial
+  updateCountdown();
 </script>
 
-<style>
-  .contador-del-dia {
-    text-align: center;
-    margin: 20px 0;
-  }
+<div class="relative w-full max-w-4xl mx-auto">
+  <div class="absolute top-0 left-0 right-0 text-center">
+    <p class="text-gray-600 italic font-script text-2xl">¡Para el gran día faltan!</p>
+  </div>
+  
+  <div class="flex justify-center items-center space-x-8 pt-16 pb-8">
+    <div class="text-center">
+      <div id="days" class="text-5xl font-bold">0</div>
+      <div class="text-gray-600">Días</div>
+    </div>
+    
+    <div class="text-center">
+      <div id="hours" class="text-5xl font-bold">00</div>
+      <div class="text-gray-600">Horas</div>
+    </div>
+    
+    <div class="text-center">
+      <div id="minutes" class="text-5xl font-bold">00</div>
+      <div class="text-gray-600">Min.</div>
+    </div>
+    
+    <div class="text-center">
+      <div id="seconds" class="text-5xl font-bold">00</div>
+      <div class="text-gray-600">Seg.</div>
+    </div>
+  </div>
+</div>
 
-  .contador-del-dia h2 {
-    font-size: 1.5rem;
-    font-weight: bold;
-  }
 
-  #dias-faltantes {
-    color: #ff5733;
-  }
-</style>
+
