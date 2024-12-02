@@ -1,11 +1,35 @@
 ---
-export interface Props {
-  codigo: string;
-}
-const { codigo = 'Formal' } = Astro.props;
 ---
-
-<section class="codigo-vestimenta">
-  <h2>Código de Vestimenta</h2>
-  <p>{codigo}</p>
-</section>
+<div class="flex flex-col items-center bg-white p-6 rounded-md shadow-md">
+    <!-- Título -->
+    <h2 class="text-2xl font-serif font-bold text-gray-800 mb-4">
+      Código de Vestimenta
+    </h2>
+    
+    <!-- Subtítulo -->
+    <p class="text-lg font-semibold text-gray-700 mb-6">
+      Formal
+    </p>
+  
+    <!-- Ilustración -->
+    <div class="flex items-center space-x-4 mb-6">
+      <!-- Vestido -->
+      <img
+        src="/path-to-dress-icon.svg"
+        alt="Vestido formal"
+        class="w-20 h-auto"
+      />
+      <!-- Traje -->
+      <img
+        src="/path-to-suit-icon.svg"
+        alt="Traje formal"
+        class="w-20 h-auto"
+      />
+    </div>
+  
+    <!-- Nota -->
+    <p class="text-sm font-medium text-gray-600">
+      <span class="text-red-500 font-bold">¡No utilizar color Blanco!</span>
+    </p>
+  </div>
+  

@@ -2,12 +2,10 @@
 export interface Props {
   momentos: string[];
 }
-const { momentos = ['Foto de los novios', 'Corte del pastel'] } = Astro.props;
+
 ---
 
 <section class="momentos">
-  <h2>Momentos Especiales</h2>
-  <ul>
-    {momentos.map(momento => <li>{momento}</li>)}
-  </ul>
+  <h1 class="font-bold">Momentos Especiales</h1>
+  
 </section>
