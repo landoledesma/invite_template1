@@ -1,12 +1,84 @@
----
-export interface Props {
-  titulo: string;
-  mensaje: string;
-}
-const { titulo = '¡Estás Invitado!', mensaje = 'Te esperamos para celebrar nuestro día especial.' } = Astro.props;
----
-
-<section class="carta-invitacion">
-  <h1>{titulo}</h1>
-  <p>{mensaje}</p>
-</section>
+<!-- Sección para insertar en tu archivo .astro -->
+<style>
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0) translateX(0);
+      }
+      25% {
+        transform: translateY(-10px) translateX(5px);
+      }
+      50% {
+        transform: translateY(-5px) translateX(-5px);
+      }
+      75% {
+        transform: translateY(-15px) translateX(3px);
+      }
+    }
+  
+    @keyframes floatInner {
+      0%, 100% {
+        transform: translateY(0) translateX(0) scale(1);
+        opacity: 0.3;
+      }
+      50% {
+        transform: translateY(-20px) translateX(10px) scale(1.1);
+        opacity: 0.1;
+      }
+    }
+  
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(253, 224, 71, 0.2);
+      pointer-events: none;
+      animation: float 6s infinite ease-in-out;
+    }
+  
+    .inner-bubble {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(253, 224, 71, 0.15);
+      pointer-events: none;
+      animation: floatInner 8s infinite ease-in-out;
+    }
+  </style>
+  
+  <div class="relative min-h-[600px] bg-gradient-to-b from-purple-50 to-pink-50 bg-opacity-50 overflow-hidden mt-20 ">
+    <!-- Burbujas exteriores -->
+    <div class="bubble" style="left: 10%; top: 20%; width: 30px; height: 30px; animation-delay: 0s;"></div>
+    <div class="bubble" style="left: 35%; top: 45%; width: 45px; height: 45px; animation-delay: 1s;"></div>
+    <div class="bubble" style="left: 65%; top: 30%; width: 25px; height: 25px; animation-delay: 2s;"></div>
+    <div class="bubble" style="left: 85%; top: 60%; width: 40px; height: 40px; animation-delay: 3s;"></div>
+    <div class="bubble" style="left: 25%; top: 70%; width: 35px; height: 35px; animation-delay: 4s;"></div>
+    <div class="bubble" style="left: 50%; top: 80%; width: 28px; height: 28px; animation-delay: 2.5s;"></div>
+    <div class="bubble" style="left: 75%; top: 15%; width: 32px; height: 32px; animation-delay: 1.5s;"></div>
+    
+    <!-- Contenido de la invitación -->
+    <div class="container mx-auto px-4 py-20 relative bg-opacity-100">
+      <div class="max-w-lg mx-auto bg-white/100 backdrop-blur-sm p-12 rounded-lg shadow-lg text-center relative overflow-hidden">
+        <!-- Burbujas interiores -->
+        <div class="inner-bubble" style="left: 5%; top: 10%; width: 20px; height: 20px; animation-delay: 0s;"></div>
+        <div class="inner-bubble" style="right: 15%; top: 30%; width: 25px; height: 25px; animation-delay: 2s;"></div>
+        <div class="inner-bubble" style="left: 20%; bottom: 20%; width: 15px; height: 15px; animation-delay: 4s;"></div>
+        <div class="inner-bubble" style="right: 10%; bottom: 30%; width: 18px; height: 18px; animation-delay: 6s;"></div>
+        <div class="inner-bubble" style="left: 50%; top: 50%; width: 22px; height: 22px; animation-delay: 3s;"></div>
+        
+        <h1 class="text-4xl mb-4 text-yellow-600 relative z-10">Cristell</h1>
+        <p class="text-2xl text-yellow-600 relative z-10">&</p>
+        <h1 class="text-4xl my-4 text-yellow-600 relative z-10">Orlando</h1>
+        
+        <p class="mt-8 text-gray-700 leading-relaxed relative z-10">
+          Deseamos celebrar el amor y 
+          la unión con la bendición de 
+          Dios, por eso nos complace 
+          que nos acompañes a vivir el 
+          inicio de este nuevo viaje.
+        </p>
+        
+        <div class="mt-12 relative z-10">
+          <p class="text-yellow-600 font-semibold">SÁBADO</p>
+          <p class="text-3xl text-yellow-600 mt-2">08 · FEBRERO · 2026</p>
+        </div>
+      </div>
+    </div>
+  </div>

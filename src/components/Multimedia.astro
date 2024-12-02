@@ -11,10 +11,10 @@ const audioExists = await fetch('/multimedia/cancion.mp3')
   .catch(() => false);
 ---
 
-<section class="py-20 bg-gradient-to-b from-pink-50 to-white">
+<section >
   <div class="max-w-6xl mx-auto px-4">
-    <h2 class="text-4xl font-serif text-center mb-16 text-gray-800">Nuestros Momentos</h2>
     
+
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-center">
       <!-- Video o Mensaje -->
       <div class="rounded-lg overflow-hidden shadow-xl bg-white p-4">
@@ -36,7 +36,7 @@ const audioExists = await fetch('/multimedia/cancion.mp3')
       <div class="relative overflow-hidden">
         <div class="imagen-container">
           <img 
-            src="/img/Pareja1.webp" 
+            src="/img/pareja1.webp" 
             alt="Nuestra foto especial" 
             class="w-full h-[500px] object-cover rounded-lg shadow-2xl imagen-rotada"
             loading="lazy"
@@ -96,3 +96,5 @@ const audioExists = await fetch('/multimedia/cancion.mp3')
     }
   }
 </style>
+
+
