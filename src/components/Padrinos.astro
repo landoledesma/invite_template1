@@ -1,13 +1,192 @@
----
-export interface Props {
-  padrinos: string[];
-}
-const { padrinos = ['Nombre del Padrino 1', 'Nombre del Padrino 2'] } = Astro.props;
----
+<!-- index.html -->
+<section class="w-full max-w-6xl mx-auto py-12 px-4">
+  <h2 class="text-3xl text-center font-serif mb-8">Nuestros Padrinos</h2>
+  
+  <div id="carousel" class="carousel relative w-full h-96 bg-gray-100 rounded-lg overflow-hidden">
+    <div class="carousel-inner relative w-full h-full">
+      <div class="carousel-item absolute inset-0 opacity-0 transition-all duration-700 ease-in-out" data-index="0">
+        <img src="/img/hotel.webp" alt="Padrinos de Anillos" class="w-full h-full object-cover transition-opacity duration-500">
+        <div class="info-overlay absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 transition-all duration-700 ease-in-out">
+          <div class="text-center text-white transform translate-y-4 transition-transform duration-700">
+            <h3 class="text-2xl font-serif mb-2">Padrinos de Anillos</h3>
+            <p class="text-lg">Juan y María González</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="carousel-item absolute inset-0 opacity-0 transition-all duration-700 ease-in-out" data-index="1">
+        <img src="/img/hotel.webp" alt="Padrinos de Lazo" class="w-full h-full object-cover transition-opacity duration-500">
+        <div class="info-overlay absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 transition-all duration-700 ease-in-out">
+          <div class="text-center text-white transform translate-y-4 transition-transform duration-700">
+            <h3 class="text-2xl font-serif mb-2">Padrinos de Lazo</h3>
+            <p class="text-lg">Pedro y Ana Martínez</p>
+          </div>
+        </div>
+      </div>
+    </div>
 
-<section class="padrinos">
-  <h2>Padrinos</h2>
-  <ul>
-    {padrinos.map(padrino => <li>{padrino}</li>)}
-  </ul>
+    <button class="prev absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full hover:bg-white transition-colors duration-300 z-20" aria-label="Anterior">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+    </button>
+
+    <button class="next absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full hover:bg-white transition-colors duration-300 z-20" aria-label="Siguiente">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </button>
+  </div>
 </section>
+
+<style>
+  .carousel-item {
+    z-index: 0;
+  }
+  
+  .carousel-item.active {
+    opacity: 1 !important;
+    z-index: 10;
+  }
+  
+  .carousel-item.active .info-overlay {
+    opacity: 1 !important;
+  }
+  
+  .carousel-item.active .info-overlay > div {
+    transform: translateY(0) !important;
+  }
+
+  /* Asegurarse de que los botones estén siempre visibles */
+  .carousel button.prev,
+  .carousel button.next {
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+  }
+
+  .carousel button.prev:hover,
+  .carousel button.next:hover {
+    opacity: 1;
+  }
+</style>
+
+<script>
+interface CarouselConfig {
+  autoplayInterval?: number;
+  animationDuration?: number;
+}
+
+class Carousel {
+  private currentIndex: number = 0;
+  private items: HTMLElement[];
+  private prevButton: HTMLElement;
+  private nextButton: HTMLElement;
+  private isAnimating: boolean = false;
+  private autoplayInterval: number;
+  private animationDuration: number;
+  private autoplayTimer?: number;
+
+  constructor(containerId: string, config: CarouselConfig = {}) {
+    const container = document.getElementById(containerId);
+    if (!container) throw new Error(`Container with id ${containerId} not found`);
+
+    this.items = Array.from(container.querySelectorAll('.carousel-item')) as HTMLElement[];
+    this.prevButton = container.querySelector('.prev') as HTMLElement;
+    this.nextButton = container.querySelector('.next') as HTMLElement;
+    this.autoplayInterval = config.autoplayInterval || 5000;
+    this.animationDuration = config.animationDuration || 700;
+
+    if (!this.items.length) throw new Error('No carousel items found');
+    if (!this.prevButton || !this.nextButton) throw new Error('Navigation buttons not found');
+
+    this.init();
+  }
+
+  private init(): void {
+    // Mostrar el primer slide inmediatamente
+    this.items[0].classList.add('active');
+    
+    this.setupAutoPlay();
+    this.setupEventListeners();
+  }
+
+  private setupEventListeners(): void {
+    this.prevButton.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      this.stopAutoPlay();
+      this.prevSlide();
+    });
+
+    this.nextButton.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      this.stopAutoPlay();
+      this.nextSlide();
+    });
+
+    // Reanudar autoplay cuando el mouse sale del carrusel
+    const container = document.getElementById('carousel');
+    container?.addEventListener('mouseleave', () => {
+      this.setupAutoPlay();
+    });
+
+    // Detener autoplay cuando el mouse entra al carrusel
+    container?.addEventListener('mouseenter', () => {
+      this.stopAutoPlay();
+    });
+  }
+
+  private showSlide(index: number): void {
+    if (this.isAnimating) return;
+    this.isAnimating = true;
+
+    // Remover clase active del slide actual
+    this.items[this.currentIndex].classList.remove('active');
+    
+    // Añadir clase active al nuevo slide
+    this.items[index].classList.add('active');
+
+    // Permitir nueva animación después de la transición
+    setTimeout(() => {
+      this.isAnimating = false;
+    }, this.animationDuration);
+
+    this.currentIndex = index;
+  }
+
+  private nextSlide(): void {
+    if (this.isAnimating) return;
+    const nextIndex = (this.currentIndex + 1) % this.items.length;
+    this.showSlide(nextIndex);
+  }
+
+  private prevSlide(): void {
+    if (this.isAnimating) return;
+    const prevIndex = (this.currentIndex - 1 + this.items.length) % this.items.length;
+    this.showSlide(prevIndex);
+  }
+
+  private setupAutoPlay(): void {
+    this.stopAutoPlay(); // Limpia el timer existente si lo hay
+    this.autoplayTimer = window.setInterval(() => {
+      this.nextSlide();
+    }, this.autoplayInterval);
+  }
+
+  private stopAutoPlay(): void {
+    if (this.autoplayTimer) {
+      clearInterval(this.autoplayTimer);
+      this.autoplayTimer = undefined;
+    }
+  }
+}
+
+// Inicializar el carrusel cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', () => {
+  new Carousel('carousel', {
+    autoplayInterval: 5000,
+    animationDuration: 700
+  });
+});
+</script>
