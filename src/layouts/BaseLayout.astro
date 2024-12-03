@@ -5,8 +5,8 @@ import Multimedia from '../components/Multimedia.astro';
 import CartaInvitacion from '../components/CartaInvitacion.astro';
 import PadresDelNovio from '../components/PadresDelNovio.astro';
 import ContadorDelDia from '../components/ContadorDelDia.astro';
-import Lugar from '../components/Lugar.astro';
-import Recepcion from '../components/Recepcion.astro';
+import VenueSection from '../components/Lugar/VenueSection.astro'; 
+import { churchVenue, receptionVenue } from '../components/Lugar/venuesdata';
 import Padrinos from '../components/Padrinos.astro';
 import Intinerario from '../components/Intinerario.astro';
 import CodigoDeVestimenta from '../components/CodigoDeVestimenta.astro';
@@ -55,12 +55,15 @@ const { title } = Astro.props;
         ]}
       />
       <ContadorDelDia fechaEvento="2024-12-31" />
-      <Lugar titulo="Ceremonia Religiosa" direccion="Iglesia de San Pedro, Calle 123, Ciudad" />
-      <Lugar titulo="Recepción" direccion="Salón Las Palmas, Av. Principal 456, Ciudad" />
-      <Recepcion direccion="Av. Principal 456, Ciudad" />
+      
+      <!-- Secciones de Venue (Ceremonia y Recepción) -->
+      <div class="space-y-12 p-4">
+        <VenueSection {...churchVenue} client="church" />
+        <VenueSection {...receptionVenue} client="reception" />
+      </div>
+
       <Padrinos padrinos={["María y José", "Ana y Luis"]} />
-      <Intinerario 
-      />
+      <Intinerario />
       <CodigoDeVestimenta codigo="Formal" />
       <MesaDeRegalos enlace="https://ejemplo.com/mesa-de-regalos" />
       <Momentos momentos={["Entrada de los novios", "Primer baile", "Corte del pastel"]} />

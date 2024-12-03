@@ -1,0 +1,18 @@
+---
+import type { VenueProps } from './venue';
+import Lugar from './Lugar.astro';
+import VenueCard from './VenueCard.astro';
+
+type Props = VenueProps & {
+  client: string;
+};
+
+const { client, ...venueProps } = Astro.props;
+---
+
+<div class="relative w-full max-w-4xl mx-auto mb-8">
+  <Lugar images={venueProps.images} client={client} />
+  <VenueCard {...venueProps} />
+</div>
+
+

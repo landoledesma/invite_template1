@@ -1,0 +1,100 @@
+
+---
+interface Props {
+  images: string[];
+  client: string;
+}
+
+const { images, client } = Astro.props;
+---
+
+<div class="relative h-96 overflow-hidden rounded-lg" data-carousel={client}>
+  <div class="relative h-full">
+    {
+      images.map((image, index) => (
+        <div
+          class:list={[
+            'absolute w-full h-full transition-opacity duration-700 ease-in-out',
+            index === 0 ? 'opacity-100' : 'opacity-0'
+          ]}
+          data-carousel-item
+        >
+          <img
+            src={image}
+            alt="Venue image"
+            class="w-full h-full object-cover"
+          />
+        </div>
+      ))
+    }
+  </div>
+  
+  <div class="absolute inset-0 bg-black/30"></div>
+  
+  <button
+    type="button"
+    class="absolute left-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/80 hover:bg-white transition-colors"
+    data-carousel-prev
+  >
+    <span class="sr-only">Previous</span>
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="15 18 9 12 15 6" />
+    </svg>
+  </button>
+  
+  <button
+    type="button"
+    class="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/80 hover:bg-white transition-colors"
+    data-carousel-next
+  >
+    <span class="sr-only">Next</span>
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="9 18 15 12 9 6" />
+    </svg>
+  </button>
+</div>
+
+<script>
+class Carousel {
+  private items: HTMLElement[];
+  private prevButton: HTMLButtonElement;
+  private nextButton: HTMLButtonElement;
+  private currentIndex: number = 0;
+
+  constructor(container: HTMLElement) {
+    this.items = Array.from(container.querySelectorAll('[data-carousel-item]'));
+    this.prevButton = container.querySelector('[data-carousel-prev]')!;
+    this.nextButton = container.querySelector('[data-carousel-next]')!;
+    
+    this.setupEventListeners();
+  }
+
+  private setupEventListeners() {
+    this.prevButton.addEventListener('click', () => this.prev());
+    this.nextButton.addEventListener('click', () => this.next());
+  }
+
+  private updateItems() {
+    this.items.forEach((item, index) => {
+      item.classList.toggle('opacity-0', index !== this.currentIndex);
+      item.classList.toggle('opacity-100', index === this.currentIndex);
+    });
+  }
+
+  private next() {
+    this.currentIndex = (this.currentIndex + 1) % this.items.length;
+    this.updateItems();
+  }
+
+  private prev() {
+    this.currentIndex = (this.currentIndex - 1 + this.items.length) % this.items.length;
+    this.updateItems();
+  }
+}
+
+// Initialize all carousels on the page
+document.querySelectorAll('[data-carousel]').forEach(carousel => {
+  new Carousel(carousel as HTMLElement);
+});
+</script>
+
