@@ -1,17 +1,59 @@
 ---
-export interface Props {
-  hoteles: { nombre: string; direccion: string }[];
-}
-const { hoteles = [{ nombre: 'Hotel Ejemplo', direccion: 'Dirección aquí' }] } = Astro.props;
+// HotelSection.astro
 ---
 
-<section class="sugerencia-de-hospedajes">
-  <h2>Sugerencias de Hospedajes</h2>
-  <ul>
-    {hoteles.map(hotel => (
-      <li>
-        <strong>{hotel.nombre}</strong>: {hotel.direccion}
-      </li>
-    ))}
-  </ul>
+<section class="relative w-full h-screen overflow-hidden">
+  <!-- Background Image Container (Duplicated and darkened) -->
+  <div class="absolute inset-0 bg-cover bg-center"
+       style="background-image: url('/img/hotel.webp');">
+      <!-- Overlay to darken the background -->
+      <div class="absolute inset-0 bg-black/70"></div>
+  </div>
+
+  <!-- Main Content Container -->
+  <div class="relative z-10 max-w-6xl mx-auto h-full flex flex-col items-center justify-center px-4 py-12">
+      <!-- Title -->
+      <h2 class="text-4xl md:text-5xl text-white font-script mb-12">
+          Sugerencias de Hospedaje
+      </h2>
+
+      <!-- Card Container -->
+      <div class="w-full max-w-3xl bg-white/5 backdrop-blur-sm rounded-lg overflow-hidden shadow-2xl">
+          <img 
+              src="/img/hotel.webp" 
+              alt="Hotel interior" 
+              class="w-full aspect-[16/9] object-cover"
+          >
+      </div>
+
+      <!-- Button -->
+      <button 
+          class="mt-8 px-8 py-2.5 bg-neutral-200/20 hover:bg-neutral-200/30 
+                 backdrop-blur-sm transition-all duration-300 
+                 border border-white/20 rounded">
+          <span class="text-white text-sm tracking-wider">VER HOSPEDAJE</span>
+      </button>
+  </div>
 </section>
+
+<style>
+  .font-script {
+      font-family: 'Dancing Script', cursive;
+  }
+
+  /* Subtle fade-in animation for the content */
+  @keyframes fadeIn {
+      from { 
+          opacity: 0; 
+          transform: translateY(10px);
+      }
+      to { 
+          opacity: 1; 
+          transform: translateY(0);
+      }
+  }
+
+  .relative {
+      animation: fadeIn 0.8s ease-out forwards;
+  }
+</style>
